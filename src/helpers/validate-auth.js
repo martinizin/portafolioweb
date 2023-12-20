@@ -8,3 +8,12 @@ module.exports.isAuthenticated = (req,res,next)=>{
     //PROCESO DE REDIRECCIÓN HACIA EL LOGIN
     res.redirect('/user/login')
 }
+
+//Creación de un método para validar  lo siguiente “Si el usuario ya está autenticado
+//redirige a otra página” , caso contrario se presenta la página del login.
+module.exports.redirectIfAuthenticated = (req, res, next)=>{
+    if (req.isAuthenticated()) {
+        return res.redirect('/portafolios');
+    }
+        return next();
+}

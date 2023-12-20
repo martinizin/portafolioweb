@@ -6,6 +6,8 @@ const passport = require('passport');
 const session = require('express-session');
 //Importamos el path
 const path = require('path');
+//Importar fileupload
+const fileUpload = require('express-fileupload')
 
 //Importamos handlebars
 const { engine }  = require('express-handlebars')
@@ -20,6 +22,13 @@ require('./config/passport')
 // Configuraciones 
 app.set('port',process.env.port || 3000)
 app.set('views',path.join(__dirname, 'views'))
+//Configuracones de file Upload
+app.use(fileUpload({
+    //Establecer archivos temporales
+    useTempFiles : true,
+    //Especificar el directorio
+    tempFileDir : './uploads'
+}));
 
 //Establecemos el directorio de las vistas
 app.set('views',path.join(__dirname, 'views'))

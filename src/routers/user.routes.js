@@ -2,9 +2,12 @@
 const {Router} = require('express')
 const { renderRegisterForm, registerNewUser, renderLoginForm, loginUser, logoutUser } = require('../controllers/user.controller')
 const router = Router()
+//Importación de la función
+const { redirectIfAuthenticated } = require('../helpers/validate-auth')
+
 
 //RUTA PARA MOSTRAR EL FORMULARIO DE REGISTRO
-router.get('/user/register',renderRegisterForm)
+router.get('/user/login', redirectIfAuthenticated, renderLoginForm)
 //RUTA PARA CAPTURAR LA INFORMACIÓN DEL FORMULARIO Y ALMACENAR EN LA BDD
 router.post('/user/register',registerNewUser)
 
