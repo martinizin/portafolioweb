@@ -2,9 +2,11 @@
 const Portfolio = require('../models/Portfolio')
 
 //Método para listar todos los portafolios
+
 const renderAllPortafolios = async(req,res)=>{
-    //Almacenar todos los portafolios en la variable y convertir en json
-    const portfolios = await Portfolio.find().lean()
+    //Almacenar todos los portafolios del usuario que inicia sesión en la variable (lean) y luego convertir en json
+    const portfolios = await Portfolio.find({user:req.user._id}).lean()
+    //Invocar a la vista y mandar a la variable
     res.render("portafolio/allPortfolios",{portfolios})
 }
 
@@ -19,9 +21,14 @@ const renderPortafolioForm = (req,res)=>{
 }
 
 //Método para guardar en la bdd lo capturado en el formulario
+
 const createNewPortafolio =async (req,res)=>{
     const {title, category,description} = req.body
+    //crear una nueva instancia del portafolio
     const newPortfolio = new Portfolio({title,category,description})
+    //Asociar al usuario que inicia sesión al portafolio
+    newPortfolio.user = req.user._id
+    //Almacenar en la BDD
     await newPortfolio.save()
     res.redirect('/portafolios')
 }
@@ -34,11 +41,12 @@ const renderEditPortafolioForm =async(req,res)=>{
 
 //Método para actualizar en la base de datos lo capturado en el formulario
 const updatePortafolio = async(req,res)=>{
-    //Desestructurar en req.body
+    //Obtener un portafolio en base al 'id'
+    const portfolio = await Portfolio.findById(req.params.id).lean()
+    //Verificar que el usuario que actualice el portafolio sea el mismo que inicie sesión
+    if(!(portfolio.user.toString() !== req.user._id.toString())) return res.redirect('/portafolios')
     const {title,category,description}= req.body
-    //Actualizar en la base de datos
     await Portfolio.findByIdAndUpdate(req.params.id,{title,category,description})
-    //Redireccionar a la vista de portafolios
     res.redirect('/portafolios')
 }
 
