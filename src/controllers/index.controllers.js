@@ -1,17 +1,16 @@
+//Importación del modelo
+const Portfolio = require('../models/Portfolio')
 //El controlador está encargado de trabajar en la lógica de la aplicación
 
-//Renderizar la página inicial
-const renderIndex = (req,res)=>{
-    res.render('index')
-}
-
-//Renderizar la página login
-const renderLogin = (req,res)=>{
-    res.render('login')
+//Método para listar todos los portafolios
+const renderIndex = async(req,res)=>{
+    //Consultar todos los portafolios, transformar a JSON y almacenarlos en la variable portafolios
+    const portfolios = await Portfolio.find().lean()
+    //Invoxar a la vista index y pasar a la variable portafolios
+    res.render('index',{portfolios})
 }
 
 //Exportación de las variables
 module.exports ={
-    renderIndex, 
-    renderLogin
+    renderIndex
 }
