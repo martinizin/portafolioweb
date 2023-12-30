@@ -1,21 +1,18 @@
-//Importación de moongose
 const mongoose = require('mongoose')
+const {DBUSER,DBPASSWORD,DBNAME} = process.env
+MONGODB_URI = `mongodb+srv://${DBUSER}:${DBPASSWORD}@cluster0.23vp8zt.mongodb.net/${DBNAME}`
 
-//Cadena de conexión que utiliza MongoDBAtlas
-//const MONGODB_URI = 'mongodb+srv://byrontosh:sistemas@cluster0.6e8zntc.mongodb.net/test'
 
-//Cadena de conexión local
-//const MONGODB_URI = 'mongodb://localhost:27017/portafolio'
 
-//Función para conectar a la base 
 connection = async()=>{
     try {
-         await mongoose.connect(process.env.MONGODB_URI)
+         await mongoose.connect(MONGODB_URI,{
+            useUnifiedTopology:true,
+            useNewUrlParser:true
+        })
         console.log("Database is connected")
     } catch (error) {
         console.log(error);
     }
 }
-
-//Exportar la función
 module.exports = connection
